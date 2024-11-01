@@ -138,14 +138,14 @@ This approach addresses both preservation of existing affordable housing and cre
 - Improve maintenance of current public housing stock ($405 million needed for immediate repairs)
 - Better utilize existing units (address the 74% occupancy rate in public housing)
 
-1. Build long-term sustainability:
+2. Build long-term sustainability:
 
 - Reform program implementation to ensure Housing Production Trust Fund meets its legal requirements
 - Improve geographic distribution of affordable housing across all planning areas
 - Create stronger preservation incentives for existing affordable units
 - Develop more effective public-private partnerships for new development
 
-1. Improve system efficiency:
+3. Improve system efficiency:
 
 - Streamline administrative processes
 - Strengthen program oversight
