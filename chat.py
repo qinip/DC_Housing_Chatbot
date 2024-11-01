@@ -86,7 +86,7 @@ class HybridRetriever(BaseRetriever):
         if len(bm25_scores) > 0:
             bm25_scores = (bm25_scores - bm25_scores.min()) / (bm25_scores.max() - bm25_scores.min())
         
-        # Combine scores with weights (70% vector, 30% BM25)
+        # Combine scores with weights (80% vector, 20% BM25)
         final_scores = []
         for i, (doc, v_score) in enumerate(vector_results):
             combined_score = 0.8 * v_score + 0.2 * bm25_scores[i]  # Adjusted weights if needed
