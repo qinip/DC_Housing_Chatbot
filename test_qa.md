@@ -1,7 +1,7 @@
 # DC Housing Policy Test Q&A
 
 ## Type 1 - Precise Facts Questions:
-In 2017, what percentage of single-family houses or condominium sales in DC were affordable to a first-time homebuyer at 80% of median family income ($88,240)?
+
 **Q1: What percentage of DC's housing stock is made up of large units (3+ bedrooms)?**
 
 **A**: One third (33.3%) of DC's housing stock of 306,700 units is composed of "large units" with three or more bedrooms. Of these, 20% are three bedrooms, 9% are four-bedroom units and 4% are five-or-more-bedroom units.
