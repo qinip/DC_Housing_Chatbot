@@ -12,7 +12,6 @@ load_dotenv()
 # Initialize the models
 models = Models()
 embeddings = models.embeddings_openai
-llm = models.model_openrouter
 
 # Define constants
 data_folder = "./data"
