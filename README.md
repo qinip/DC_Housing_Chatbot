@@ -1,6 +1,6 @@
-# DC Housing Policy Document QA System
+# DC Housing Policy Chatbot (Demo)
 
-A document QA system built with LangChain and ChromaDB for analyzing DC housing policy documents.
+A document QA chatbot demo built with LangChain and ChromaDB for analyzing DC housing policy documents.
 
 ## Credit
 This project is adapted from [this tutorial](https://github.com/aidev9/tuts/tree/main/langchain-rag-pdf/tutorial-1) and Claude.ai's [Contextual Retrieval Cookbook](https://github.com/anthropics/anthropic-cookbook/tree/main/skills/contextual-embeddings).
