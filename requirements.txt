@@ -1,0 +1,26 @@
+# Core packages
+langchain==0.3.6
+langchain-community==0.3.4
+langchain-text-splitters==0.3.1
+
+# Vector store
+chromadb==0.5.16
+langchain-chroma==0.1.4
+
+# LLM providers
+langchain-openai==0.2.4
+langchain-anthropic==0.2.3
+langchain-groq==0.2.0
+langchain-openrouter==0.0.1
+langchain-ollama==0.2.0
+
+# Document processing
+pypdf==5.1.0
+tiktoken==0.8.0
+
+# Utilities
+python-dotenv==1.0.1
+rank-bm25>=0.2.2
+
+# UI
+gradio==5.4.0
