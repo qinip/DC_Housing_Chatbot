@@ -4,6 +4,10 @@ import numpy as np
 import gradio as gr
 from pydantic import Field, BaseModel
 from rank_bm25 import BM25Okapi
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.chains.combine_documents import create_stuff_documents_chain
@@ -20,7 +24,7 @@ embeddings = models.embeddings_openai
 llm = models.model_openrouter
 
 # Choose whether to use hybrid retrieval (BM25 + Vector) or simple retrieval (Vector)
-USE_HYBRID = True
+USE_HYBRID = False
 
 # Initialize vector store for document storage and retrieval
 vector_store = Chroma(
@@ -180,9 +184,21 @@ def get_response(query: str) -> str:
     response += "\n".join(formatted_sources)
     return response
 
-def chat_response(message, history):
+def get_context_from_history(history, max_history=5):
     """
-    Handle chat messages for Gradio interface
+    Generate context string from chat history
+    """
+    if not history:
+        return ""
+    
+    # Only use the last max_history conversations
+    recent_history = history[-max_history:]
+    context = "\n".join([f"Human: {h[0]}\nAssistant: {h[1]}" for h in recent_history])
+    return context
+
+def chat_response(message, history, history_length):
+    """
+    Handle chat messages for Gradio interface with history support
     """
     if message.lower().strip() == 'q':
         return """Closing chat... 
@@ -193,7 +209,17 @@ def chat_response(message, history):
         }, 1000);
         </script>
         """
-    return get_response(message)
+    
+    # Get context from history
+    context = get_context_from_history(history, max_history=history_length)
+    
+    # Combine current query with historical context
+    if context:
+        enhanced_query = f"Previous conversation:\n{context}\n\nCurrent question: {message}"
+    else:
+        enhanced_query = message
+    
+    return get_response(enhanced_query)
 
 def main():
     """
@@ -214,18 +240,45 @@ def main():
             print("\nAssistant:", result, "\n")
     else:
         # Graphical interface
-        demo = gr.ChatInterface(
-            chat_response,
-            title="DC Housing Policy Assistant",
-            description="Ask questions about DC housing policy documents (type 'q' to quit)",
-            theme="soft",
-            examples=[
-                "What are the main housing affordability challenges in DC?",
-                "What portion of DC's Housing Production Trust Fund is legally required to support the lowest-income residents?"
-            ]
-        )
+        with gr.Blocks(title="DC Housing Policy Assistant") as demo:
+            gr.Markdown("# DC Housing Policy Assistant")
+            gr.Markdown("Ask questions about DC housing policy documents (type 'q' to quit)")
+            
+            chatbot = gr.Chatbot()
+            msg = gr.Textbox(label="Your question")
+            
+            # Example questions in the middle
+            gr.Examples(
+                examples=[
+                    "What are the main housing affordability challenges in DC?",
+                    "What portion of DC's Housing Production Trust Fund is legally required to support the lowest-income residents?"
+                ],
+                inputs=msg
+            )
+            
+            with gr.Row():
+                history_dropdown = gr.Dropdown(
+                    choices=[str(i) for i in range(1, 11)],
+                    value="5",
+                    label="Number of previous conversations to remember",
+                )
+                clear = gr.Button("Clear")
+
+            def user(user_message, history):
+                return "", history + [[user_message, None]]
+
+            def bot(history, history_length):
+                user_message = history[-1][0]
+                bot_message = chat_response(user_message, history[:-1], int(history_length))
+                history[-1][1] = bot_message
+                return history
+
+            msg.submit(user, [msg, chatbot], [msg, chatbot]).then(
+                bot, [chatbot, history_dropdown], chatbot
+            )
+            clear.click(lambda: None, None, chatbot, queue=False)
+        
         demo.launch(show_api=False, share=True)
 
 if __name__ == "__main__":
     main()
-
